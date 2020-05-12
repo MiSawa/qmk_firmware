@@ -19,3 +19,15 @@
 #define RGBLIGHT_SLEEP
 
 // place overrides here
+
+#ifdef OLED_DRIVER_ENABLE
+
+#ifndef SOFT_SERIAL_PIN
+#define SOFT_SERIAL_PIN D2
+#endif
+#define USE_SERIAL_PD2
+
+#define SERIAL_USE_MULTI_TRANSACTION
+#define SSD1306OLED
+#endif // OLED_ENABLED
+
