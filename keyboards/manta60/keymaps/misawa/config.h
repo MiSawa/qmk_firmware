@@ -20,6 +20,7 @@
 
 // place overrides here
 
+#define EE_HANDS
 #ifdef OLED_DRIVER_ENABLE
 
 #ifndef SOFT_SERIAL_PIN

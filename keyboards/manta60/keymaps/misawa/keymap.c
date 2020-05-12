@@ -132,6 +132,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 
 #ifdef OLED_DRIVER_ENABLE
+#include "split_util.h"
+
 static void render_logo(void) {
     static const char PROGMEM qmk_logo[] = {
         0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8D, 0x8E, 0x8F, 0x90, 0x91, 0x92, 0x93, 0x94,
@@ -172,7 +174,7 @@ void render_status(void) {
 }
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-    if (!is_keyboard_master()) {
+    if (!isLeftHand) {
         return OLED_ROTATION_180;  // flips the display 180 degrees if offhand
     }
 
@@ -180,7 +182,7 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 }
 
 void oled_task_user(void) {
-    if (is_keyboard_master()) {
+    if (isLeftHand) {
         render_status();  // Renders the current keyboard state (layer, lock, caps, scroll, etc)
     } else {
         render_logo();  // Renders a static logo
