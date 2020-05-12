@@ -13,4 +13,26 @@ function get_this_dir() {
 
 readonly this_dir="$(get_this_dir)"
 readonly qmk_root="$(realpath "$this_dir/../../../../")"
-(cd "$qmk_root" && sudo make "manta60:misawa:avrdude")
+readonly keymap="manta60:misawa"
+require_sudo=0
+operation=""
+
+case "$1" in
+  build)
+    operation="$keymap"
+    ;;
+  write)
+    operation="$keymap:avrdude"
+    require_sudo=1
+    ;;
+  *)
+    echo "Unknown operation $1" >&2
+    exit 1
+    ;;
+esac
+if [[ "$require_sudo" -eq 1 ]]; then
+  (cd "$qmk_root" && sudo make "$operation")
+else
+  (cd "$qmk_root" && make "$operation")
+fi
+
