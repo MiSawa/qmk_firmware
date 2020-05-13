@@ -13,3 +13,4 @@ LINK_TIME_OPTIMIZATION_ENABLE = yes  # if firmware size over limit, try this opt
 RGBLIGHT_ENABLE = no        # Disable keyboard RGB underglow
 OLED_DRIVER_ENABLE = yes            # OLED_ENABLE
 
+SRC += oled_tasks.c
