@@ -16,6 +16,13 @@
 #include QMK_KEYBOARD_H
 #include "constants.h"
 
+#define KC_LOWER MO(LAYER_LOWER)
+#define KC_RAISE MO(LAYER_RAISE)
+#define KC_ADJ   MO(LAYER_ADJUST)
+
+#define LALTMHEN ALT_T(KC_MHEN)
+#define RALTHENK RALT_T(KC_HENK)
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT(
   //,---------------------------------------------------------------------.,---------------------------------------------------------------------.
@@ -27,7 +34,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
        KC_LSFT,     KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,                          KC_N,     KC_M,  KC_COMM,   KC_DOT,  KC_SLSH,  KC_RSFT,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
-      KC_LOWER,  XXXXXXX,  KC_LALT, KC_LCTRL,   KC_SPC,  KC_LGUI,   KC_ENT,    KC_ENT,   KC_DEL,  KC_BSPC, KC_RCTRL,  KC_RALT,  XXXXXXX, KC_RAISE
+      KC_LOWER,  XXXXXXX, LALTMHEN, KC_LCTRL,   KC_SPC,  KC_LGUI,   KC_ENT,    KC_ENT,   KC_DEL,  KC_BSPC, KC_RCTRL, RALTHENK,  XXXXXXX, KC_RAISE
   //`---------+----------/\-------+---------+---------+---------+---------/\---------+---------+---------+---------+---------/\--------+----------'
   ),
 
