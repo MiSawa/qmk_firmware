@@ -27,7 +27,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
        KC_LSFT,     KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,                          KC_N,     KC_M,  KC_COMM,   KC_DOT,  KC_SLSH,  KC_RSFT,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
-         LOWER,  XXXXXXX,  KC_LALT, KC_LCTRL,   KC_SPC,  KC_LGUI,   KC_ENT,    KC_ENT,   KC_DEL,  KC_BSPC, KC_RCTRL,  KC_RALT,  XXXXXXX,   RAISE
+      KC_LOWER,  XXXXXXX,  KC_LALT, KC_LCTRL,   KC_SPC,  KC_LGUI,   KC_ENT,    KC_ENT,   KC_DEL,  KC_BSPC, KC_RCTRL,  KC_RALT,  XXXXXXX, KC_RAISE
   //`---------+----------/\-------+---------+---------+---------+---------/\---------+---------+---------+---------+---------/\--------+----------'
   ),
 
@@ -41,9 +41,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
        _______,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,                       XXXXXXX,  XXXXXXX,  XXXXXXX,  _______,  _______,  _______,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
-         LOWER,  XXXXXXX,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  XXXXXXX,   RAISE
+       _______,  XXXXXXX,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  XXXXXXX,  _______
   //`---------+----------/\-------+---------+---------+---------+---------/\---------+---------+---------+---------+---------/\--------+----------'
- ),
+  ),
 
   [LAYER_RAISE] = LAYOUT(
   //,---------------------------------------------------------------------.,---------------------------------------------------------------------.
@@ -55,53 +55,30 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
        _______,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,                       XXXXXXX,  XXXXXXX,  XXXXXXX,  KC_LEFT,  KC_DOWN,  KC_RGHT,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
-         LOWER,  XXXXXXX,  _______,  _______,  KC_BTN2,  KC_BTN3,  KC_BTN1,   _______,  _______,  _______,  _______,  _______,  XXXXXXX,   RAISE
+       _______,  XXXXXXX,  _______,  _______,  KC_BTN2,  KC_BTN3,  KC_BTN1,   _______,  _______,  _______,  _______,  _______,  XXXXXXX,  _______
   //`---------+----------/\-------+---------+---------+---------+---------/\---------+---------+---------+---------+---------/\--------+----------'
   ),
 
   [LAYER_ADJUST] = LAYOUT(
   //,---------------------------------------------------------------------.,---------------------------------------------------------------------.
-       XXXXXXX,  RGB_TOG,  XXXXXXX,  XXXXXXX,  XXXXXXX,  RGB_M_R,  XXXXXXX,   XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,   RESET,
+       XXXXXXX,  RGB_TOG,  XXXXXXX,  XXXXXXX,  XXXXXXX,  RGB_M_R,  XXXXXXX,   XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,    RESET,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
-       _______,  RGB_MOD,  RGB_HUI,  RGB_SAI,  RGB_VAI, RGB_M_SN,  XXXXXXX,   XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX, XXXXXXX,
+       _______,  RGB_MOD,  RGB_HUI,  RGB_SAI,  RGB_VAI, RGB_M_SN,  XXXXXXX,   XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
-       _______,  RGB_M_T,  RGB_HUD,  RGB_SAD,  RGB_VAD,  RGB_M_K,  XXXXXXX,   XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX, XXXXXXX,
+       _______,  RGB_M_T,  RGB_HUD,  RGB_SAD,  RGB_VAD,  RGB_M_K,  XXXXXXX,   XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
-       _______,  RGB_M_P,  XXXXXXX,  XXXXXXX,  XXXXXXX, RGB_M_SW,                       XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX, XXXXXXX,
+       _______,  RGB_M_P,  XXXXXXX,  XXXXXXX,  XXXXXXX, RGB_M_SW,                       XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
-         LOWER,  XXXXXXX,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  XXXXXXX,   RAISE
+       _______,  XXXXXXX,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  XXXXXXX,  _______
   //`---------+----------/\-------+---------+---------+---------+---------/\---------+---------+---------+---------+---------/\--------+----------'
   )
 };
 
-static inline layer_id kc_to_layer(custom_keycodes const kc) {
-  return (kc - LOWER) + LAYER_LOWER;
-}
-
-static inline void update_tri_layer(layer_id const layer1, layer_id const layer2, layer_id const layer3) {
-  if (IS_LAYER_ON(layer1) && IS_LAYER_ON(layer2)) {
-    layer_on(layer3);
-  } else {
-    layer_off(layer3);
-  }
+inline layer_state_t layer_state_set_user(layer_state_t const state) {
+  return update_tri_layer_state(state, LAYER_LOWER, LAYER_RAISE, LAYER_ADJUST);
 }
 
 bool process_record_user(uint16_t const keycode, keyrecord_t * const record) {
-  layer_id layer;
-  switch (keycode) {
-    case LOWER:
-    case RAISE:
-    case ADJUST:
-      layer = kc_to_layer(keycode);
-      if (record->event.pressed) {
-        layer_on(layer);
-      } else {
-        layer_off(layer);
-      }
-      update_tri_layer(LAYER_LOWER, LAYER_RAISE, LAYER_ADJUST);
-      return false;
-      break;
-  }
   return true;
 }
 

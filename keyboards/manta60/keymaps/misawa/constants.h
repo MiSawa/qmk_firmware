@@ -17,3 +17,7 @@ typedef enum {
   ADJUST
 } custom_keycodes;
 
+#define KC_LOWER MO(LAYER_LOWER)
+#define KC_RAISE MO(LAYER_RAISE)
+#define KC_ADJ   MO(LAYER_ADJUST)
+
