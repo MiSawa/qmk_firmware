@@ -8,16 +8,12 @@ typedef enum {
   LAYER_LOWER,
   LAYER_RAISE,
   LAYER_ADJUST,
-} layer_id;
+} layer_ids;
 
 // Defines the keycodes used by our macros in process_record_user
-typedef enum {
-  LOWER = SAFE_RANGE,
-  RAISE,
-  ADJUST
-} custom_keycodes;
-
-#define KC_LOWER MO(LAYER_LOWER)
-#define KC_RAISE MO(LAYER_RAISE)
-#define KC_ADJ   MO(LAYER_ADJUST)
+// typedef enum {
+//   LOWER = SAFE_RANGE,
+//   RAISE,
+//   ADJUST
+// } custom_keycodes;
 
