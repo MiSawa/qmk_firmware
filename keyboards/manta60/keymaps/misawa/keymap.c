@@ -17,7 +17,7 @@
 #include "constants.h"
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-  [_BASE] = LAYOUT(
+  [LAYER_BASE] = LAYOUT(
   //,---------------------------------------------------------------------.,---------------------------------------------------------------------.
         KC_ESC,     KC_1,     KC_2,     KC_3,     KC_4,     KC_5, KC_MINUS,    KC_EQL,     KC_6,     KC_7,     KC_8,     KC_9,     KC_0,   KC_GRV,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
@@ -31,7 +31,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //`---------+----------/\-------+---------+---------+---------+---------/\---------+---------+---------+---------+---------/\--------+----------'
   ),
 
-  [_LOWER] = LAYOUT(
+  [LAYER_LOWER] = LAYOUT(
   //,---------------------------------------------------------------------.,---------------------------------------------------------------------.
         KC_GRV,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,    KC_6,       KC_5,  XXXXXXX,  XXXXXXX,  XXXXXXX, KC_MINUS,   KC_EQL,  KC_BSPC,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
@@ -45,7 +45,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //`---------+----------/\-------+---------+---------+---------+---------/\---------+---------+---------+---------+---------/\--------+----------'
  ),
 
-  [_RAISE] = LAYOUT(
+  [LAYER_RAISE] = LAYOUT(
   //,---------------------------------------------------------------------.,---------------------------------------------------------------------.
        _______,    KC_F1,    KC_F2,    KC_F3,    KC_F4,    KC_F5,   KC_F11,    KC_F12,    KC_F6,    KC_F7,    KC_F8,    KC_F9,   KC_F10,  XXXXXXX,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
@@ -59,7 +59,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //`---------+----------/\-------+---------+---------+---------+---------/\---------+---------+---------+---------+---------/\--------+----------'
   ),
 
-  [_ADJUST] = LAYOUT(
+  [LAYER_ADJUST] = LAYOUT(
   //,---------------------------------------------------------------------.,---------------------------------------------------------------------.
        XXXXXXX,  RGB_TOG,  XXXXXXX,  XXXXXXX,  XXXXXXX,  RGB_M_R,  XXXXXXX,   XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,   RESET,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
@@ -74,7 +74,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   )
 };
 
-static inline void update_tri_layer_RGB(uint8_t layer1, uint8_t layer2, uint8_t layer3) {
+static inline layer_id kc_to_layer(custom_keycodes const kc) {
+  return (kc - LOWER) + LAYER_LOWER;
+}
+
+static inline void update_tri_layer(layer_id const layer1, layer_id const layer2, layer_id const layer3) {
   if (IS_LAYER_ON(layer1) && IS_LAYER_ON(layer2)) {
     layer_on(layer3);
   } else {
@@ -82,34 +86,19 @@ static inline void update_tri_layer_RGB(uint8_t layer1, uint8_t layer2, uint8_t 
   }
 }
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+bool process_record_user(uint16_t const keycode, keyrecord_t * const record) {
+  layer_id layer;
   switch (keycode) {
     case LOWER:
-      if (record->event.pressed) {
-        layer_on(_LOWER);
-        update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
-      } else {
-        layer_off(_LOWER);
-        update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
-      }
-      return false;
-      break;
     case RAISE:
-      if (record->event.pressed) {
-        layer_on(_RAISE);
-        update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
-      } else {
-        layer_off(_RAISE);
-        update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
-      }
-      return false;
-      break;
     case ADJUST:
+      layer = kc_to_layer(keycode);
       if (record->event.pressed) {
-        layer_on(_ADJUST);
+        layer_on(layer);
       } else {
-        layer_off(_ADJUST);
+        layer_off(layer);
       }
+      update_tri_layer(LAYER_LOWER, LAYER_RAISE, LAYER_ADJUST);
       return false;
       break;
   }
