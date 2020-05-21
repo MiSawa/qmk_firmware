@@ -2,6 +2,8 @@
 
 #include QMK_KEYBOARD_H
 
+#define KEYMAP_VERSION "0.0.1"
+
 // Defines names for use in layer keycodes and the keymap
 typedef enum {
   LAYER_BASE = 0,
@@ -11,9 +13,7 @@ typedef enum {
 } layer_ids;
 
 // Defines the keycodes used by our macros in process_record_user
-// typedef enum {
-//   LOWER = SAFE_RANGE,
-//   RAISE,
-//   ADJUST
-// } custom_keycodes;
+typedef enum {
+  KC_VER = SAFE_RANGE,
+} custom_keycodes;
 

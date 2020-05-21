@@ -34,7 +34,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
        KC_LSFT,     KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,                          KC_N,     KC_M,  KC_COMM,   KC_DOT,  KC_SLSH,  KC_RSFT,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
-      KC_LOWER,  XXXXXXX, LALTMHEN, KC_LCTRL,   KC_SPC,  KC_LGUI,   KC_ENT,    KC_ENT,   KC_DEL,  KC_BSPC, KC_RCTRL, RALTHENK,  XXXXXXX, KC_RAISE
+      KC_LOWER,  XXXXXXX, LALTMHEN, KC_LCTRL,   KC_SPC,  KC_LGUI,   KC_DEL,   KC_BSPC,   KC_DEL,   KC_ENT, KC_RCTRL, RALTHENK,  XXXXXXX, KC_RAISE
   //`---------+----------/\-------+---------+---------+---------+---------/\---------+---------+---------+---------+---------/\--------+----------'
   ),
 
@@ -74,7 +74,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
        _______,  RGB_M_T,  RGB_HUD,  RGB_SAD,  RGB_VAD,  RGB_M_K,  XXXXXXX,   XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
-       _______,  RGB_M_P,  XXXXXXX,  XXXXXXX,  XXXXXXX, RGB_M_SW,                       XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,
+       _______,  RGB_M_P,  XXXXXXX,  XXXXXXX,   KC_VER, RGB_M_SW,                       XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
        _______,  XXXXXXX,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  XXXXXXX,  _______
   //`---------+----------/\-------+---------+---------+---------+---------/\---------+---------+---------+---------+---------/\--------+----------'
@@ -86,6 +86,14 @@ inline layer_state_t layer_state_set_user(layer_state_t const state) {
 }
 
 bool process_record_user(uint16_t const keycode, keyrecord_t * const record) {
+  switch (keycode) {
+    case KC_VER:
+      if (record->event.pressed) {
+        SEND_STRING(KEYMAP_VERSION);
+      }
+      return false;
+      break;
+  }
   return true;
 }
 
