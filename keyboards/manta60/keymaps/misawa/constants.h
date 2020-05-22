@@ -2,7 +2,7 @@
 
 #include QMK_KEYBOARD_H
 
-#define KEYMAP_VERSION "0.0.1"
+#define KEYMAP_VERSION "0.0.2"
 
 // Defines names for use in layer keycodes and the keymap
 typedef enum {
