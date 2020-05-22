@@ -18,6 +18,9 @@ require_sudo=0
 operation=""
 
 case "$1" in
+  clean)
+    operation="clean"
+    ;;
   build)
     operation="$keymap"
     ;;

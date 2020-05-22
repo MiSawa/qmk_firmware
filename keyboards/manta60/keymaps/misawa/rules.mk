@@ -14,3 +14,6 @@ RGBLIGHT_ENABLE = no        # Disable keyboard RGB underglow
 OLED_DRIVER_ENABLE = yes            # OLED_ENABLE
 
 SRC += oled_tasks.c
+
+LAYOUTS = pinkey2u
+
