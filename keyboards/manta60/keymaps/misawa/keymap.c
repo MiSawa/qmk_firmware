@@ -14,8 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include QMK_KEYBOARD_H
-#include "constants.h"
-#include "pinkey2u/pinkey2u.h"
+#include <constants.h>
+#include <pinkey2u/pinkey2u.h>
 
 #define KC_LOWER MO(LAYER_LOWER)
 #define KC_RAISE MO(LAYER_RAISE)
@@ -90,7 +90,7 @@ bool process_record_user(uint16_t const keycode, keyrecord_t * const record) {
   switch (keycode) {
     case KC_VER:
       if (record->event.pressed) {
-        SEND_STRING(KEYMAP_VERSION);
+        SEND_STRING(ALL_VERSION);
       }
       return false;
       break;
