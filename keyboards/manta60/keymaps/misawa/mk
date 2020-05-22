@@ -38,9 +38,7 @@ case "$1" in
     ;;
 esac
 
-if [[ "$require_sudo" -eq 1 ]]; then
-  (cd "$qmk_root" && sudo make "$operation")
-else
-  (cd "$qmk_root" && make "$operation")
-fi
+su=''
+[[ "$require_sudo" -eq 1 ]] && su='sudo'
+(cd "$qmk_root" && $su make "$operation")
 
