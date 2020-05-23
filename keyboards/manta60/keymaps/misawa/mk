@@ -19,7 +19,7 @@ operation=""
 
 case "$1" in
   clean)
-    operation="clean"
+    operation="clean distclean"
     ;;
   build)
     operation="$keymap"
