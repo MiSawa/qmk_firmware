@@ -1,6 +1,6 @@
 #pragma once
 
-#include "quantum.h"
+#include <quantum.h>
 
 // Unused cell
 #define XXX KC_NO

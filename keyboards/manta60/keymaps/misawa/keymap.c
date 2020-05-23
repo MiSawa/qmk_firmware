@@ -16,6 +16,7 @@
 #include QMK_KEYBOARD_H
 #include <constants.h>
 #include <pinkey2u/pinkey2u.h>
+#include <command_mode.h>
 
 #define KC_LOWER MO(LAYER_LOWER)
 #define KC_RAISE MO(LAYER_RAISE)
@@ -73,7 +74,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
        _______,  RGB_MOD,  RGB_HUI,  RGB_SAI,  RGB_VAI, RGB_M_SN,  XXXXXXX,   XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
-       _______,  RGB_M_T,  RGB_HUD,  RGB_SAD,  RGB_VAD,  RGB_M_K,  XXXXXXX,   XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,
+       _______,  RGB_M_T,  RGB_HUD,  RGB_SAD,  RGB_VAD,  RGB_M_K,  XXXXXXX,   XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,CMD_START,  XXXXXXX,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
        _______,  RGB_M_P,  XXXXXXX,  XXXXXXX,   KC_VER, RGB_M_SW,                       XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
@@ -82,15 +83,31 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   )
 };
 
+bool increase_volume(void) { SEND_STRING(SS_TAP(X_VOLU)); return true; }
+bool decrease_volume(void) { SEND_STRING(SS_TAP(X_VOLD)); return true; }
+bool mute_volume(void) { SEND_STRING(SS_TAP(X_MUTE)); return true; }
+bool emit_version(void) { SEND_STRING(ALL_VERSION); return false; }
+
+const Command commands[] = {
+  (Command) {.name = "vol+", .handler = increase_volume},
+  (Command) {.name = "vol-", .handler = decrease_volume},
+  (Command) {.name = "mute", .handler = mute_volume},
+  (Command) {.name = "ver",  .handler = emit_version},
+  END_OF_COMMANDS,
+};
+
 inline layer_state_t layer_state_set_user(layer_state_t const state) {
   return update_tri_layer_state(state, LAYER_LOWER, LAYER_RAISE, LAYER_ADJUST);
 }
 
 bool process_record_user(uint16_t const keycode, keyrecord_t * const record) {
+  if (!process_record_user_command(keycode, record)) {
+    return false;
+  }
   switch (keycode) {
     case KC_VER:
       if (record->event.pressed) {
-        SEND_STRING(ALL_VERSION);
+        emit_version();
       }
       return false;
       break;

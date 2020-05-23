@@ -3,8 +3,9 @@
 #include QMK_KEYBOARD_H
 #include <quantum/version.h>
 
-#define KEYMAP_VERSION "0.0.2"
+#define KEYMAP_VERSION "0.0.3"
 #define ALL_VERSION KEYMAP_VERSION "_" QMK_VERSION  "_" QMK_BUILDDATE
+
 
 // Defines names for use in layer keycodes and the keymap
 typedef enum {
@@ -17,5 +18,6 @@ typedef enum {
 // Defines the keycodes used by our macros in process_record_user
 typedef enum {
   KC_VER = SAFE_RANGE,
+  CMD_START,
 } custom_keycodes;
 

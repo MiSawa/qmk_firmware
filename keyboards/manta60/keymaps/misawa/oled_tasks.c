@@ -1,7 +1,8 @@
 #ifdef OLED_DRIVER_ENABLE
-#include "split_util.h"
-#include "oled_tasks.h"
-#include "constants.h"
+#include <split_util.h>
+#include <oled_tasks.h>
+#include <constants.h>
+#include <command_mode.h>
 
 static void __attribute__((unused)) render_logo(void) {
   static const char PROGMEM qmk_logo[] = {
@@ -49,6 +50,9 @@ oled_rotation_t oled_init_user(const oled_rotation_t rotation) {
 
 void oled_task_user(void) {
   if (is_keyboard_master()) {
+    if (!oled_task_user_command()) {
+        return;
+    }
     render_status();  // Renders the current keyboard state (layer, lock, caps, scroll, etc)
   } else {
 #ifdef ENABLE_SLAVE_OLED
