@@ -2,7 +2,7 @@
 #include <split_util.h>
 #include <oled_tasks.h>
 #include <constants.h>
-#include <command_mode.h>
+#include <command_mode/oled.h>
 
 static void __attribute__((unused)) render_logo(void) {
   static const char PROGMEM qmk_logo[] = {

@@ -40,5 +40,5 @@ esac
 
 su=''
 [[ "$require_sudo" -eq 1 ]] && su='sudo'
-(cd "$qmk_root" && $su make "$operation")
+(cd "$qmk_root" && $su make $operation)
 

@@ -16,7 +16,8 @@
 #include QMK_KEYBOARD_H
 #include <constants.h>
 #include <pinkey2u/pinkey2u.h>
-#include <command_mode.h>
+#include <command_mode/command_mode.h>
+#include <command_mode/keymap.h>
 
 #define KC_LOWER MO(LAYER_LOWER)
 #define KC_RAISE MO(LAYER_RAISE)

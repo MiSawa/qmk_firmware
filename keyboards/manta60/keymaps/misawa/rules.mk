@@ -14,7 +14,8 @@ RGBLIGHT_ENABLE = no        # Disable keyboard RGB underglow
 OLED_DRIVER_ENABLE = yes    # OLED_ENABLE
 EXTRAKEY_ENABLE = yes       # Audio control and System control
 
-SRC += oled_tasks.c command_mode.c
+include $(dir $(realpath $(lastword $(MAKEFILE_LIST))))/command_mode/rules.mk
 
+SRC += oled_tasks.c
 LAYOUTS = pinkey2u
 
