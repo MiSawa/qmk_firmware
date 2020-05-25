@@ -89,16 +89,16 @@ bool decrease_volume(void) { SEND_STRING(SS_TAP(X_VOLD)); return true; }
 bool mute_volume(void) { SEND_STRING(SS_TAP(X_MUTE)); return true; }
 bool emit_version(void) { SEND_STRING(ALL_VERSION); return false; }
 
-bool increase_auto_shift_timeout(void) { SEND_STRING(X_ASUP); return true; }
-bool decrease_auto_shift_timeout(void) { SEND_STRING(X_ASDN); return true; }
-bool report_auto_shift_timeout(void) { SEND_STRING(X_ASRP); return false; }
-bool toggle_auto_shift(void) { SEND_STRING(X_ASTG); return false; }
+// bool increase_auto_shift_timeout(void) { tap_code16(KC_ASUP); return true; }
+// bool decrease_auto_shift_timeout(void) { tap_code16(KC_ASDN); return true; }
+// bool report_auto_shift_timeout(void) { tap_code16(KC_ASRP); return false; }
+// bool toggle_auto_shift(void) { tap_code16(KC_ASTG); return false; }
 
 const Command commands[] = {
-  (Command) {.name = "as+",  .handler = increase_auto_shift_timeout},
-  (Command) {.name = "as-",  .handler = decrease_auto_shift_timeout},
-  (Command) {.name = "as?",  .handler = report_auto_shift_timeout},
-  (Command) {.name = "as!",  .handler = toggle_auto_shift},
+  // (Command) {.name = "as+",  .handler = increase_auto_shift_timeout},
+  // (Command) {.name = "as-",  .handler = decrease_auto_shift_timeout},
+  // (Command) {.name = "as?",  .handler = report_auto_shift_timeout},
+  // (Command) {.name = "as!",  .handler = toggle_auto_shift},
   (Command) {.name = "vol+", .handler = increase_volume},
   (Command) {.name = "vol-", .handler = decrease_volume},
   (Command) {.name = "mute", .handler = mute_volume},
