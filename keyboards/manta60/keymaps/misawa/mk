@@ -14,23 +14,23 @@ function get_this_dir() {
 readonly this_dir="$(get_this_dir)"
 readonly qmk_root="$(realpath "$this_dir/../../../../")"
 readonly keymap="manta60:misawa"
-require_sudo=0
 operation=""
 
 case "$1" in
+  format)
+    operation="qmk cformat -b keyboards/manta60/keymaps/misawa/**/*.[ch]"
+    ;;
   clean)
-    operation="clean distclean"
+    operation="sudo make clean distclean"
     ;;
   build)
-    operation="$keymap"
+    operation="sudo make $keymap"
     ;;
   write)
-    operation="$keymap:avrdude"
-    require_sudo=1
+    operation="sudo make $keymap:avrdude"
     ;;
   write-right|write-left)
-    operation="$keymap:avrdude-split-$(echo "$1" | cut -d '-' -f 2)"
-    require_sudo=1
+    operation="sudo make $keymap:avrdude-split-$(echo "$1" | cut -d '-' -f 2)"
     ;;
   *)
     echo "Unknown operation $1" >&2
@@ -38,7 +38,5 @@ case "$1" in
     ;;
 esac
 
-su=''
-[[ "$require_sudo" -eq 1 ]] && su='sudo'
-(cd "$qmk_root" && $su make $operation)
+(cd "$qmk_root" && $operation)
 
