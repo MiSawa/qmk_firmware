@@ -5,7 +5,7 @@
 #    error ENTER_COMMAND_MODE_KEY should be defined
 #endif
 
-bool process_record_user_command(uint16_t const keycode, keyrecord_t* const record) {
+bool __attribute__((unused)) process_record_user_command(uint16_t const keycode, keyrecord_t* const record) {
     if (!is_in_command_mode()) {
         if ((keycode == ENTER_COMMAND_MODE_KEY) && record->event.pressed) {
             enter_command_mode();

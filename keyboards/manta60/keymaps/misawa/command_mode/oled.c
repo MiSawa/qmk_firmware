@@ -2,7 +2,7 @@
 #include "command_mode.h"
 #include "oled.h"
 
-bool oled_task_user_command(void) {
+bool __attribute__((unused)) oled_task_user_command(void) {
     if (!is_in_command_mode()) {
         return true;
     }

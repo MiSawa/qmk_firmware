@@ -14,22 +14,22 @@ int get_num_commands(void) {
     return num_commands;
 }
 
-bool is_in_command_mode(void) { return in_command_mode; }
+bool __attribute__((unused)) is_in_command_mode(void) { return in_command_mode; }
 
-void enter_command_mode(void) {
+void __attribute__((unused)) enter_command_mode(void) {
     oled_clear();
     in_command_mode   = true;
     current_selection = 0;
 }
 
-void exit_command_mode(void) {
+void __attribute__((unused)) exit_command_mode(void) {
     oled_clear();
     in_command_mode = false;
 }
 
 int get_current_selection(void) { return current_selection; }
 
-void select_next(void) {
+void __attribute__((unused)) select_next(void) {
     ++current_selection;
     const int num_commands = get_num_commands();
     if (current_selection >= num_commands) {
@@ -37,14 +37,14 @@ void select_next(void) {
     }
 }
 
-void select_prev(void) {
+void __attribute__((unused)) select_prev(void) {
     --current_selection;
     if (current_selection < 0) {
         current_selection = 0;
     }
 }
 
-bool execute_current_command(void) {
+bool __attribute__((unused)) execute_current_command(void) {
     const int cur = get_current_selection();
     if (0 <= cur && cur < get_num_commands()) {
         const Command command = commands[cur];
