@@ -26,6 +26,7 @@
 #define LALTMHEN ALT_T(KC_MHEN)
 #define RALTHENK RALT_T(KC_HENK)
 
+// clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT_pinkey2u(
   //,---------------------------------------------------------------------.,---------------------------------------------------------------------.
@@ -83,6 +84,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //`---------+---------/\--------+---------+---------+---------+---------/\---------+---------+---------+---------+---------/\--------+---------'
   )
 };
+// clang-format on
 
 bool increase_volume(void) { SEND_STRING(SS_TAP(X_VOLU)); return true; }
 bool decrease_volume(void) { SEND_STRING(SS_TAP(X_VOLD)); return true; }
