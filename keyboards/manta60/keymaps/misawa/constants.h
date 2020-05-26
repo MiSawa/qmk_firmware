@@ -1,4 +1,5 @@
 #pragma once
+#include QMK_KEYBOARD_H
 #include <quantum/version.h>
 
 #define KEYMAP_VERSION "0.0.3"
@@ -18,3 +19,4 @@ typedef enum {
     KC_VER = SAFE_RANGE,
     CMD_START,
 } custom_keycodes;
+

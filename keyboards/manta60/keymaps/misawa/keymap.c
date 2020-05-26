@@ -14,7 +14,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include QMK_KEYBOARD_H
-#include <constants.h>
 #include <pinkey2u/pinkey2u.h>
 #include <command_mode/command_mode.h>
 #include <command_mode/keymap.h>
@@ -95,6 +94,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 DECLARE_TAP_KEY_FUNC(VOLU, true);
 DECLARE_TAP_KEY_FUNC(VOLD, true);
 DECLARE_TAP_KEY_FUNC(MUTE, true);
+
 bool emit_version(void) {
     SEND_STRING(ALL_VERSION);
     return false;

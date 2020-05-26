@@ -18,8 +18,6 @@
 
 #define RGBLIGHT_SLEEP
 
-// place overrides here
-
 #define EE_HANDS  // store handedness on EEPROM
 
 #ifdef OLED_DRIVER_ENABLE
@@ -38,3 +36,6 @@
 #    define ENABLE_SLAVE_OLED
 
 #endif  // OLED_ENABLED
+
+#include "constants.h"
+

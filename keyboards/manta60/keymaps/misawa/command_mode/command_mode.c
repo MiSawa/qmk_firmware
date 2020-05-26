@@ -1,5 +1,4 @@
 #include QMK_KEYBOARD_H
-#include <constants.h>
 #include "command_mode.h"
 
 bool in_command_mode   = false;

@@ -21,10 +21,10 @@ case "$1" in
     operation="qmk cformat -b keyboards/manta60/keymaps/misawa/**/*.[ch]"
     ;;
   clean)
-    operation="sudo make clean distclean"
+    operation="make clean distclean"
     ;;
   build)
-    operation="sudo make $keymap"
+    operation="make $keymap"
     ;;
   write)
     operation="sudo make $keymap:avrdude"
