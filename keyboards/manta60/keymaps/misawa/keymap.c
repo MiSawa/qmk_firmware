@@ -86,18 +86,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 // clang-format on
 
-bool increase_volume(void) {
-    SEND_STRING(SS_TAP(X_VOLU));
-    return true;
-}
-bool decrease_volume(void) {
-    SEND_STRING(SS_TAP(X_VOLD));
-    return true;
-}
-bool mute_volume(void) {
-    SEND_STRING(SS_TAP(X_MUTE));
-    return true;
-}
+#define DECLARE_TAP_KEY_FUNC(keyname, ret) \
+    bool tap_ ## keyname (void) { \
+        SEND_STRING(SS_TAP(X_ ## keyname)); \
+        return ret; \
+    }
+
+DECLARE_TAP_KEY_FUNC(VOLU, true);
+DECLARE_TAP_KEY_FUNC(VOLD, true);
+DECLARE_TAP_KEY_FUNC(MUTE, true);
 bool emit_version(void) {
     SEND_STRING(ALL_VERSION);
     return false;
@@ -108,13 +105,19 @@ bool emit_version(void) {
 // bool report_auto_shift_timeout(void) { tap_code16(KC_ASRP); return false; }
 // bool toggle_auto_shift(void) { tap_code16(KC_ASTG); return false; }
 
+// clang-format off
 const Command commands[] = {
     // (Command) {.name = "as+",  .handler = increase_auto_shift_timeout},
     // (Command) {.name = "as-",  .handler = decrease_auto_shift_timeout},
     // (Command) {.name = "as?",  .handler = report_auto_shift_timeout},
     // (Command) {.name = "as!",  .handler = toggle_auto_shift},
-    (Command){.name = "vol+", .handler = increase_volume}, (Command){.name = "vol-", .handler = decrease_volume}, (Command){.name = "mute", .handler = mute_volume}, (Command){.name = "ver", .handler = emit_version}, END_OF_COMMANDS,
+    (Command){.name = "vol+", .handler = tap_VOLU},
+    (Command){.name = "vol-", .handler = tap_VOLD},
+    (Command){.name = "mute", .handler = tap_MUTE},
+    (Command){.name = "ver", .handler = emit_version},
+    END_OF_COMMANDS,
 };
+// clang-format on
 
 inline layer_state_t layer_state_set_user(layer_state_t const state) { return update_tri_layer_state(state, LAYER_LOWER, LAYER_RAISE, LAYER_ADJUST); }
 
