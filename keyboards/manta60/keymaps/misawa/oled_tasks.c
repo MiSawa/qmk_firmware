@@ -1,5 +1,6 @@
 #ifdef OLED_DRIVER_ENABLE
 #    include QMK_KEYBOARD_H
+#    include CONSTANTS_H
 #    include "oled_tasks.h"
 #    include <split_util.h>
 #    include <command_mode/oled.h>

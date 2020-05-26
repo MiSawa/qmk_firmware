@@ -37,5 +37,5 @@
 
 #endif  // OLED_ENABLED
 
-#include "constants.h"
+#define CONSTANTS_H <constants.h>
 

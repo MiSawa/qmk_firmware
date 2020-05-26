@@ -14,6 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include QMK_KEYBOARD_H
+#include CONSTANTS_H
 #include <pinkey2u/pinkey2u.h>
 #include <command_mode/command_mode.h>
 #include <command_mode/keymap.h>
@@ -100,17 +101,54 @@ bool emit_version(void) {
     return false;
 }
 
-// bool increase_auto_shift_timeout(void) { tap_code16(KC_ASUP); return true; }
-// bool decrease_auto_shift_timeout(void) { tap_code16(KC_ASDN); return true; }
-// bool report_auto_shift_timeout(void) { tap_code16(KC_ASRP); return false; }
-// bool toggle_auto_shift(void) { tap_code16(KC_ASTG); return false; }
+#define UNDEF (~(uint16_t)(0))
+
+uint16_t keycode_to_emit = UNDEF;
+void tap_custom_key(uint16_t const keycode) {
+    if (keycode_to_emit != UNDEF) {
+        return;
+    }
+    keycode_to_emit = keycode;
+    action_exec((keyevent_t){
+            .key = (keypos_t){.row = 0, .col = 0},
+            .pressed = true,
+            .time = (timer_read() | 1)
+    });
+    keycode_to_emit = keycode;
+    action_exec((keyevent_t){
+            .key = (keypos_t){.row = 0, .col = 0},
+            .pressed = false,
+            .time = (timer_read() | 1)
+    });
+}
+
+uint16_t keymap_key_to_keycode(uint8_t const layer, keypos_t const key) {
+    if (keycode_to_emit != UNDEF) {
+        const uint16_t ret = keycode_to_emit;
+        keycode_to_emit = UNDEF;
+        return ret;
+    }
+    return pgm_read_word(&keymaps[layer][key.row][key.col]);
+}
+
+#define DECLARE_TAP_CUSTOM_KEY_FUNC(keyname, ret) \
+    bool tap_ ## keyname (void) { \
+        tap_custom_key(KC_ ## keyname); \
+        return ret; \
+    }
+
+DECLARE_TAP_CUSTOM_KEY_FUNC(ASUP, true);
+DECLARE_TAP_CUSTOM_KEY_FUNC(ASDN, true);
+DECLARE_TAP_CUSTOM_KEY_FUNC(ASRP, false);
+DECLARE_TAP_CUSTOM_KEY_FUNC(ASTG, false);
+
 
 // clang-format off
 const Command commands[] = {
-    // (Command) {.name = "as+",  .handler = increase_auto_shift_timeout},
-    // (Command) {.name = "as-",  .handler = decrease_auto_shift_timeout},
-    // (Command) {.name = "as?",  .handler = report_auto_shift_timeout},
-    // (Command) {.name = "as!",  .handler = toggle_auto_shift},
+    (Command) {.name = "as+",  .handler = tap_ASUP},
+    (Command) {.name = "as-",  .handler = tap_ASDN},
+    (Command) {.name = "as?",  .handler = tap_ASRP},
+    (Command) {.name = "as!",  .handler = tap_ASTG},
     (Command){.name = "vol+", .handler = tap_VOLU},
     (Command){.name = "vol-", .handler = tap_VOLD},
     (Command){.name = "mute", .handler = tap_MUTE},

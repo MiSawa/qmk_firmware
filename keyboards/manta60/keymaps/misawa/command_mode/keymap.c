@@ -1,5 +1,6 @@
 #include QMK_KEYBOARD_H
 #include "command_mode.h"
+#include CONSTANTS_H
 
 #ifndef ENTER_COMMAND_MODE_KEY
 #    error ENTER_COMMAND_MODE_KEY should be defined
