@@ -104,22 +104,30 @@ bool emit_version(void) {
 #define UNDEF (~(uint16_t)(0))
 
 uint16_t keycode_to_emit = UNDEF;
+keyrecord_t custom_record = {
+    .event = {
+        .key = (keypos_t) {.row = 0, .col = 0},
+        .pressed = true,
+        .time = 0
+    }
+};
+
 void tap_custom_key(uint16_t const keycode) {
     if (keycode_to_emit != UNDEF) {
         return;
     }
+
     keycode_to_emit = keycode;
-    action_exec((keyevent_t){
-            .key = (keypos_t){.row = 0, .col = 0},
-            .pressed = true,
-            .time = (timer_read() | 1)
-    });
+    custom_record.event.time = (timer_read() | 1);
+    custom_record.event.pressed = true;
+    process_record(&custom_record);
+
     keycode_to_emit = keycode;
-    action_exec((keyevent_t){
-            .key = (keypos_t){.row = 0, .col = 0},
-            .pressed = false,
-            .time = (timer_read() | 1)
-    });
+    custom_record.event.time = (timer_read() | 1);
+    custom_record.event.pressed = false;
+    process_record(&custom_record);
+
+    keycode_to_emit = UNDEF;
 }
 
 uint16_t keymap_key_to_keycode(uint8_t const layer, keypos_t const key) {
