@@ -20,23 +20,21 @@
 
 // place overrides here
 
-#define EE_HANDS // store handedness on EEPROM
+#define EE_HANDS  // store handedness on EEPROM
 
 #ifdef OLED_DRIVER_ENABLE
 
-#ifndef SOFT_SERIAL_PIN
-#define SOFT_SERIAL_PIN D2
-#endif
-#define USE_SERIAL_PD2
+#    ifndef SOFT_SERIAL_PIN
+#        define SOFT_SERIAL_PIN D2
+#    endif
+#    define USE_SERIAL_PD2
 
-#define SERIAL_USE_MULTI_TRANSACTION
-#define SSD1306OLED
+#    define SERIAL_USE_MULTI_TRANSACTION
+#    define SSD1306OLED
 
+#    define OLED_TIMEOUT 10000
+#    define OLED_SCROLL_TIMEOUT 1000
 
-#define OLED_TIMEOUT 10000
-#define OLED_SCROLL_TIMEOUT 1000
+#    define ENABLE_SLAVE_OLED
 
-#define ENABLE_SLAVE_OLED
-
-#endif // OLED_ENABLED
-
+#endif  // OLED_ENABLED

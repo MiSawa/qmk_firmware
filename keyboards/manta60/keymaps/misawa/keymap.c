@@ -21,7 +21,7 @@
 
 #define KC_LOWER MO(LAYER_LOWER)
 #define KC_RAISE MO(LAYER_RAISE)
-#define KC_ADJ   MO(LAYER_ADJUST)
+#define KC_ADJ MO(LAYER_ADJUST)
 
 #define LALTMHEN ALT_T(KC_MHEN)
 #define RALTHENK RALT_T(KC_HENK)
@@ -86,10 +86,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 // clang-format on
 
-bool increase_volume(void) { SEND_STRING(SS_TAP(X_VOLU)); return true; }
-bool decrease_volume(void) { SEND_STRING(SS_TAP(X_VOLD)); return true; }
-bool mute_volume(void) { SEND_STRING(SS_TAP(X_MUTE)); return true; }
-bool emit_version(void) { SEND_STRING(ALL_VERSION); return false; }
+bool increase_volume(void) {
+    SEND_STRING(SS_TAP(X_VOLU));
+    return true;
+}
+bool decrease_volume(void) {
+    SEND_STRING(SS_TAP(X_VOLD));
+    return true;
+}
+bool mute_volume(void) {
+    SEND_STRING(SS_TAP(X_MUTE));
+    return true;
+}
+bool emit_version(void) {
+    SEND_STRING(ALL_VERSION);
+    return false;
+}
 
 // bool increase_auto_shift_timeout(void) { tap_code16(KC_ASUP); return true; }
 // bool decrease_auto_shift_timeout(void) { tap_code16(KC_ASDN); return true; }
@@ -97,33 +109,26 @@ bool emit_version(void) { SEND_STRING(ALL_VERSION); return false; }
 // bool toggle_auto_shift(void) { tap_code16(KC_ASTG); return false; }
 
 const Command commands[] = {
-  // (Command) {.name = "as+",  .handler = increase_auto_shift_timeout},
-  // (Command) {.name = "as-",  .handler = decrease_auto_shift_timeout},
-  // (Command) {.name = "as?",  .handler = report_auto_shift_timeout},
-  // (Command) {.name = "as!",  .handler = toggle_auto_shift},
-  (Command) {.name = "vol+", .handler = increase_volume},
-  (Command) {.name = "vol-", .handler = decrease_volume},
-  (Command) {.name = "mute", .handler = mute_volume},
-  (Command) {.name = "ver",  .handler = emit_version},
-  END_OF_COMMANDS,
+    // (Command) {.name = "as+",  .handler = increase_auto_shift_timeout},
+    // (Command) {.name = "as-",  .handler = decrease_auto_shift_timeout},
+    // (Command) {.name = "as?",  .handler = report_auto_shift_timeout},
+    // (Command) {.name = "as!",  .handler = toggle_auto_shift},
+    (Command){.name = "vol+", .handler = increase_volume}, (Command){.name = "vol-", .handler = decrease_volume}, (Command){.name = "mute", .handler = mute_volume}, (Command){.name = "ver", .handler = emit_version}, END_OF_COMMANDS,
 };
 
-inline layer_state_t layer_state_set_user(layer_state_t const state) {
-  return update_tri_layer_state(state, LAYER_LOWER, LAYER_RAISE, LAYER_ADJUST);
-}
+inline layer_state_t layer_state_set_user(layer_state_t const state) { return update_tri_layer_state(state, LAYER_LOWER, LAYER_RAISE, LAYER_ADJUST); }
 
-bool process_record_user(uint16_t const keycode, keyrecord_t * const record) {
-  if (!process_record_user_command(keycode, record)) {
-    return false;
-  }
-  switch (keycode) {
-    case KC_VER:
-      if (record->event.pressed) {
-        emit_version();
-      }
-      return false;
-      break;
-  }
-  return true;
+bool process_record_user(uint16_t const keycode, keyrecord_t* const record) {
+    if (!process_record_user_command(keycode, record)) {
+        return false;
+    }
+    switch (keycode) {
+        case KC_VER:
+            if (record->event.pressed) {
+                emit_version();
+            }
+            return false;
+            break;
+    }
+    return true;
 }
-

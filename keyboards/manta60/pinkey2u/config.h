@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define DEVICE_VER 0x0001
 #define MANUFACTURER kamonanban
 #define PRODUCT manta60
-#define DESCRIPTION A split keyboard with 27 ortholinear keys and 5-7 thumb/little finger keys
+#define DESCRIPTION A split keyboard with 27 ortholinear keys and 5 - 7 thumb / little finger keys
 
 /* key matrix size */
 #define MATRIX_ROWS 10
@@ -41,8 +41,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *                  ROW2COL = ROW = Anode (+), COL = Cathode (-, marked on diode)
  *
  */
-#define MATRIX_ROW_PINS { D4, C6, D7, E6 ,B4}
-#define MATRIX_COL_PINS { F4, F5, F6, F7, B1, B3, B2 }
+#define MATRIX_ROW_PINS \
+    { D4, C6, D7, E6, B4 }
+#define MATRIX_COL_PINS \
+    { F4, F5, F6, F7, B1, B3, B2 }
 #define UNUSED_PINS
 
 /* COL2ROW, ROW2COL*/
@@ -58,12 +60,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define RGB_DI_PIN D3
 
 #ifdef RGBLIGHT_ENABLE
-  #define RGBLED_NUM 68    // Number of LEDs
-  #define RGBLED_SPLIT { 34, 34 }
+#    define RGBLED_NUM 68  // Number of LEDs
+#    define RGBLED_SPLIT \
+        { 34, 34 }
 #endif
 
 #ifdef RGB_DI_PIN
-  #define RGBLIGHT_ANIMATIONS
+#    define RGBLIGHT_ANIMATIONS
 // /*== or choose animations ==*/
 //   #define RGBLIGHT_EFFECT_BREATHING
 //   #define RGBLIGHT_EFFECT_RAINBOW_MOOD
@@ -83,21 +86,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 
 #ifndef IOS_DEVICE_ENABLE
- /* The maximum brightness level */
-  #define RGBLIGHT_LIMIT_VAL 128
-  #define RGBLIGHT_VAL_STEP 16
+/* The maximum brightness level */
+#    define RGBLIGHT_LIMIT_VAL 128
+#    define RGBLIGHT_VAL_STEP 16
 #else
-  #define RGBLIGHT_LIMIT_VAL 32
-  #define RGBLIGHT_VAL_STEP 4
+#    define RGBLIGHT_LIMIT_VAL 32
+#    define RGBLIGHT_VAL_STEP 4
 #endif
 
 #define RGBLIGHT_HUE_STEP 8
 #define RGBLIGHT_SAT_STEP 8
 
 #if defined(RGBLIGHT_ENABLE) && !defined(IOS_DEVICE_ENABLE)
-  #define USB_MAX_POWER_CONSUMPTION 400
+#    define USB_MAX_POWER_CONSUMPTION 400
 #else
-  #define USB_MAX_POWER_CONSUMPTION 100
+#    define USB_MAX_POWER_CONSUMPTION 100
 #endif
 
 /* Debounce reduces chatter (unintended double-presses) - set 0 if debouncing is not needed */
