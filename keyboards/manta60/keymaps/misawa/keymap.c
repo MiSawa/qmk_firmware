@@ -18,6 +18,7 @@
 #include <pinkey2u/pinkey2u.h>
 #include <command_mode/command_mode.h>
 #include <command_mode/keymap.h>
+#include <time_limited_auto_shift/process_time_limited_auto_shift.h>
 
 #define KC_LOWER MO(LAYER_LOWER)
 #define KC_RAISE MO(LAYER_RAISE)
@@ -168,6 +169,9 @@ const Command commands[] = {
 inline layer_state_t layer_state_set_user(layer_state_t const state) { return update_tri_layer_state(state, LAYER_LOWER, LAYER_RAISE, LAYER_ADJUST); }
 
 bool process_record_user(uint16_t const keycode, keyrecord_t* const record) {
+    if (!process_auto_shift(keycode, record)) {
+        return false;
+    }
     if (!process_record_user_command(keycode, record)) {
         return false;
     }
@@ -181,3 +185,8 @@ bool process_record_user(uint16_t const keycode, keyrecord_t* const record) {
     }
     return true;
 }
+
+void matrix_scan_user(void) {
+    matrix_scan_process_auto_shift();
+}
+
