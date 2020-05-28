@@ -14,17 +14,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#ifdef TIME_LIMITED_AUTO_SHIFT_ENABLE
+#ifdef TIME_LIMITED_AUTO_SHIFT_ENABLE
 
 #    include <stdio.h>
 
 #    include "process_time_limited_auto_shift.h"
 
-static bool     autoshift_enabled = true;
-static uint16_t autoshift_time    = 0;
-static uint16_t autoshift_timeout = AUTO_SHIFT_TIMEOUT;
+static bool     autoshift_enabled   = true;
+static uint16_t autoshift_time      = 0;
+static uint16_t autoshift_timeout   = AUTO_SHIFT_TIMEOUT;
 static uint16_t autoshift_timelimit = AUTO_SHIFT_TIMELIMIT;
-static uint16_t autoshift_lastkey = KC_NO;
+static uint16_t autoshift_lastkey   = KC_NO;
 
 void autoshift_timer_report(void) {
     char display[8];
@@ -143,10 +143,10 @@ void matrix_scan_process_auto_shift(void) {
         uint16_t elapsed = timer_elapsed(autoshift_time);
         if (elapsed > autoshift_timelimit) {
             register_code(autoshift_lastkey);
-            autoshift_time = 0;
+            autoshift_time    = 0;
             autoshift_lastkey = KC_NO;
         }
     }
 }
 
-//#endif
+#endif
