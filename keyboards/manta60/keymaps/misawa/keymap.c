@@ -27,6 +27,9 @@
 #define LALTMHEN ALT_T(KC_MHEN)
 #define RALTHENK RALT_T(KC_HENK)
 
+#define LOWERSPC LT(LAYER_LOWER, KC_SPC)
+#define RAISEENT LT(LAYER_RAISE, KC_ENT)
+
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT_pinkey2u(
@@ -39,7 +42,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
        KC_LSFT,     KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,                          KC_N,     KC_M,  KC_COMM,   KC_DOT,  KC_SLSH,  KC_RSFT,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
-      KC_LOWER,           LALTMHEN, KC_LCTRL,   KC_SPC,  KC_LGUI,   KC_DEL,   KC_BSPC,   KC_DEL,   KC_ENT, KC_RCTRL, RALTHENK,           KC_RAISE
+      KC_LOWER,           LALTMHEN, KC_LCTRL, LOWERSPC,  KC_LGUI,   KC_DEL,   KC_BSPC,   KC_DEL, RAISEENT, KC_RCTRL, RALTHENK,           KC_RAISE
   //`---------+---------/\--------+---------+---------+---------+---------/\---------+---------+---------+---------+---------/\--------+---------'
   ),
 
@@ -61,13 +64,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,---------------------------------------------------------------------.,---------------------------------------------------------------------.
        XXXXXXX,    KC_F1,    KC_F2,    KC_F3,    KC_F4,    KC_F5,   KC_F11,    KC_F12,    KC_F6,    KC_F7,    KC_F8,    KC_F9,   KC_F10,  XXXXXXX,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
-       _______,    KC_F5,    KC_F6,    KC_F7,    KC_F8,  XXXXXXX,  XXXXXXX,   XXXXXXX,  KC_MS_L,  KC_MS_D,  KC_MS_U,  KC_MS_R,  XXXXXXX,  XXXXXXX,
+       _______,    KC_F5,    KC_F6,    KC_F7,    KC_F8,  XXXXXXX,  XXXXXXX,   KC_BTN1,  KC_MS_L,  KC_MS_D,  KC_MS_U,  KC_MS_R,  XXXXXXX,  XXXXXXX,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
-       _______,    KC_F9,   KC_F10,   KC_F11,   KC_F12,  XXXXXXX,  XXXXXXX,   XXXXXXX,  KC_LEFT,  KC_DOWN,    KC_UP,  KC_RGHT,    KC_UP,  XXXXXXX,
+       _______,    KC_F9,   KC_F10,   KC_F11,   KC_F12,  XXXXXXX,  XXXXXXX,   KC_BTN2,  KC_LEFT,  KC_DOWN,    KC_UP,  KC_RGHT,    KC_UP,  XXXXXXX,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
        _______,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,                       XXXXXXX,  XXXXXXX,  XXXXXXX,  KC_LEFT,  KC_DOWN,  KC_RGHT,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
-       _______,            _______,  _______,  KC_BTN1,  KC_BTN3,  KC_BTN2,   KC_BTN2,  KC_BTN3,  KC_BTN1,  _______,  _______,            _______
+       _______,            _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,            _______
   //`---------+---------/\--------+---------+---------+---------+---------/\---------+---------+---------+---------+---------/\--------+---------'
   ),
 
