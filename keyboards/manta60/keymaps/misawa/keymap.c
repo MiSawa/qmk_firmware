@@ -31,6 +31,8 @@
 #define RAISEENT LT(LAYER_RAISE, KC_ENT)
 
 #define IST INVERT_SHIFT_TOGGLE
+#define ISON INVERT_SHIFT_ON
+#define ISOFF INVERT_SHIFT_OFF
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -58,7 +60,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
        _______,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,                       XXXXXXX,  XXXXXXX,  XXXXXXX,  _______,  _______,  _______,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
-       _______,            _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,            _______
+       _______,            _______,  _______,  _______,  _______,  _______,   _______,  _______, KC_RAISE,  _______,  _______,            _______
   //`---------+---------/\--------+---------+---------+---------+---------/\---------+---------+---------+---------+---------/\--------+---------'
   ),
 
@@ -72,7 +74,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
        _______,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,                       XXXXXXX,  XXXXXXX,  XXXXXXX,  KC_LEFT,  KC_DOWN,  KC_RGHT,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
-       _______,            _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,            _______
+       _______,            _______,  _______, KC_LOWER,  _______,  _______,   _______,  _______,  _______,  _______,  _______,            _______
   //`---------+---------/\--------+---------+---------+---------+---------/\---------+---------+---------+---------+---------/\--------+---------'
   ),
 
@@ -84,7 +86,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
        _______,  RGB_M_T,  RGB_HUD,  RGB_SAD,  RGB_VAD,  RGB_M_K,  XXXXXXX,   XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,CMD_START,  XXXXXXX,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
-           IST,  RGB_M_P,  XXXXXXX,  XXXXXXX,   KC_VER, RGB_M_SW,                       XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,
+          ISON,  RGB_M_P,  XXXXXXX,  XXXXXXX,   KC_VER, RGB_M_SW,                       XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,    ISOFF,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
        _______,            _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,            _______
   //`---------+---------/\--------+---------+---------+---------+---------/\---------+---------+---------+---------+---------/\--------+---------'
@@ -115,12 +117,26 @@ int shift_inverted_key_count = 0;
 
 uint8_t mod_before_invert_shift = 0;
 bool process_record_invert_shift(uint16_t const keycode, keyrecord_t* const record) {
-    if (keycode == INVERT_SHIFT_TOGGLE) {
-        shift_inverted_key_count = 0;
-        if (record->event.pressed) {
-            invert_shift_enabled ^= true;
-        }
-        return false;
+    switch (keycode) {
+        case INVERT_SHIFT_ON:
+        case INVERT_SHIFT_OFF:
+            {
+                shift_inverted_key_count = 0;
+                if (record->event.pressed) {
+                    invert_shift_enabled = keycode == INVERT_SHIFT_ON;
+                }
+                return false;
+            }
+            break;
+        case INVERT_SHIFT_TOGGLE:
+            {
+                shift_inverted_key_count = 0;
+                if (record->event.pressed) {
+                    invert_shift_enabled ^= true;
+                }
+                return false;
+            }
+            break;
     }
     if (under_shift_invertion) {
         if (record->event.pressed) {
