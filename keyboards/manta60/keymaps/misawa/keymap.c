@@ -30,13 +30,13 @@
 #define LOWERSPC LT(LAYER_LOWER, KC_SPC)
 #define RAISEENT LT(LAYER_RAISE, KC_ENT)
 
-#define TST TOGGLE_SHIFT_TOGGLE
+#define IST INVERT_SHIFT_TOGGLE
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT_pinkey2u(
   //,---------------------------------------------------------------------.,---------------------------------------------------------------------.
-       KC_GESC, TS(KC_1), TS(KC_2), TS(KC_3), TS(KC_4), TS(KC_5), KC_MINUS,    KC_EQL, TS(KC_6), TS(KC_7), TS(KC_8), TS(KC_9), TS(KC_0),   KC_GRV,
+       KC_GESC, IS(KC_1), IS(KC_2), IS(KC_3), IS(KC_4), IS(KC_5), KC_MINUS,    KC_EQL, IS(KC_6), IS(KC_7), IS(KC_8), IS(KC_9), IS(KC_0),   KC_GRV,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
         KC_TAB,     KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,  KC_LBRC,   KC_RBRC,     KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,  KC_BSLS,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
@@ -84,7 +84,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
        _______,  RGB_M_T,  RGB_HUD,  RGB_SAD,  RGB_VAD,  RGB_M_K,  XXXXXXX,   XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,CMD_START,  XXXXXXX,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
-           TST,  RGB_M_P,  XXXXXXX,  XXXXXXX,   KC_VER, RGB_M_SW,                       XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,
+           IST,  RGB_M_P,  XXXXXXX,  XXXXXXX,   KC_VER, RGB_M_SW,                       XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
        _______,            _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,            _______
   //`---------+---------/\--------+---------+---------+---------+---------/\---------+---------+---------+---------+---------/\--------+---------'
@@ -107,9 +107,52 @@ bool emit_version(void) {
     return false;
 }
 
-#define UNDEF (~(uint16_t)(0))
 
-uint16_t keycode_to_emit = UNDEF;
+// Invert shift featture
+bool invert_shift_enabled = false;
+bool under_shift_invertion = false;
+int shift_inverted_key_count = 0;
+
+uint8_t mod_before_invert_shift = 0;
+bool process_record_invert_shift(uint16_t const keycode, keyrecord_t* const record) {
+    if (keycode == INVERT_SHIFT_TOGGLE) {
+        shift_inverted_key_count = 0;
+        if (record->event.pressed) {
+            invert_shift_enabled ^= true;
+        }
+        return false;
+    }
+    if (under_shift_invertion) {
+        if (record->event.pressed) {
+            if (!shift_inverted_key_count++) {
+                uint8_t const current_mods = get_mods();
+                uint8_t const lshift_bit = MOD_BIT(KC_LSHIFT);
+                uint8_t const rshift_bit = MOD_BIT(KC_RSHIFT);
+                mod_before_invert_shift = current_mods;
+                if (current_mods & (lshift_bit | rshift_bit)) {
+                    set_mods(current_mods & ~(lshift_bit | rshift_bit));
+                } else {
+                    set_mods(current_mods ^ lshift_bit);
+                }
+            }
+            register_code(keycode);
+            return false;
+        } else {
+            if (!--shift_inverted_key_count) {
+                set_mods(mod_before_invert_shift);
+            }
+            unregister_code(keycode);
+            return false;
+        }
+    }
+    return true;
+}
+
+
+// emit custom key code feature
+#define UNDEF_KEY (~(uint16_t)(0))
+
+uint16_t keycode_to_emit = UNDEF_KEY;
 keyrecord_t custom_record = {
     .event = {
         .key = (keypos_t) {.row = 0, .col = 0},
@@ -119,7 +162,7 @@ keyrecord_t custom_record = {
 };
 
 void tap_custom_key(uint16_t const keycode) {
-    if (keycode_to_emit != UNDEF) {
+    if (keycode_to_emit != UNDEF_KEY) {
         return;
     }
 
@@ -133,16 +176,27 @@ void tap_custom_key(uint16_t const keycode) {
     custom_record.event.pressed = false;
     process_record(&custom_record);
 
-    keycode_to_emit = UNDEF;
+    keycode_to_emit = UNDEF_KEY;
 }
 
 uint16_t keymap_key_to_keycode(uint8_t const layer, keypos_t const key) {
-    if (keycode_to_emit != UNDEF) {
+    under_shift_invertion = false;
+    // for tap_custom_key
+    if (keycode_to_emit != UNDEF_KEY) {
         const uint16_t ret = keycode_to_emit;
-        keycode_to_emit = UNDEF;
+        keycode_to_emit = UNDEF_KEY;
         return ret;
     }
-    return pgm_read_word(&keymaps[layer][key.row][key.col]);
+    uint16_t const ret = pgm_read_word(&keymaps[layer][key.row][key.col]);
+    if (ret < INVERT_SHIFT(QK_BASIC) || INVERT_SHIFT(QK_BASIC_MAX) < ret) {
+        return ret;
+    }
+    // for invert_shift
+    if (!invert_shift_enabled) {
+        return ret - INVERT_SHIFT(QK_BASIC);
+    }
+    under_shift_invertion = true;
+    return ret - INVERT_SHIFT(QK_BASIC);
 }
 
 #define DECLARE_TAP_CUSTOM_KEY_FUNC(keyname, ret) \
@@ -173,50 +227,22 @@ const Command commands[] = {
 
 inline layer_state_t layer_state_set_user(layer_state_t const state) { return update_tri_layer_state(state, LAYER_LOWER, LAYER_RAISE, LAYER_ADJUST); }
 
-bool toggle_shift_enabled = false;
-
 bool process_record_user(uint16_t const keycode, keyrecord_t* const record) {
+    if (!process_record_invert_shift(keycode, record)) {
+        return false;
+    }
     if (!process_auto_shift(keycode, record)) {
         return false;
     }
     if (!process_record_user_command(keycode, record)) {
         return false;
     }
+
     switch (keycode) {
-        case TOGGLE_SHIFT_TOGGLE:
-            {
-                if (record->event.pressed) {
-                    toggle_shift_enabled ^= true;
-                }
-                return false;
-            }
-            break;
         case KC_VER:
             {
                 if (record->event.pressed) {
                     emit_version();
-                }
-                return false;
-            }
-            break;
-        case TOGGLE_SHIFT ... TOGGLE_SHIFT_MAX:
-            {
-                if (record->event.pressed) {
-                    uint16_t const actual_kc = keycode - TOGGLE_SHIFT;
-                    if (toggle_shift_enabled) {
-                        uint8_t const current_mods = get_mods();
-                        uint8_t const lshift_bit = MOD_BIT(KC_LSHIFT);
-                        uint8_t const rshift_bit = MOD_BIT(KC_RSHIFT);
-                        if (current_mods & (lshift_bit | rshift_bit)) {
-                            set_mods(current_mods & ~(lshift_bit | rshift_bit));
-                        } else {
-                            set_mods(current_mods ^ lshift_bit);
-                        }
-                        tap_code(actual_kc);
-                        set_mods(current_mods);
-                    } else {
-                        tap_code(actual_kc);
-                    }
                 }
                 return false;
             }

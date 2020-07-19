@@ -19,6 +19,12 @@
 #define RGBLIGHT_SLEEP
 
 #define EE_HANDS  // store handedness on EEPROM
+// #define TAPPING_FORCE_HOLD
+// #define TAPPING_TERM 180
+#ifdef DEBOUNCE
+# undef DEBOUNCE
+#endif
+#define DEBOUNCE 10
 
 #ifdef OLED_DRIVER_ENABLE
 
