@@ -30,11 +30,13 @@
 #define LOWERSPC LT(LAYER_LOWER, KC_SPC)
 #define RAISEENT LT(LAYER_RAISE, KC_ENT)
 
+#define TST TOGGLE_SHIFT_TOGGLE
+
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT_pinkey2u(
   //,---------------------------------------------------------------------.,---------------------------------------------------------------------.
-       KC_GESC,     KC_1,     KC_2,     KC_3,     KC_4,     KC_5, KC_MINUS,    KC_EQL,     KC_6,     KC_7,     KC_8,     KC_9,     KC_0,   KC_GRV,
+       KC_GESC, TS(KC_1), TS(KC_2), TS(KC_3), TS(KC_4), TS(KC_5), KC_MINUS,    KC_EQL, TS(KC_6), TS(KC_7), TS(KC_8), TS(KC_9), TS(KC_0),   KC_GRV,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
         KC_TAB,     KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,  KC_LBRC,   KC_RBRC,     KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,  KC_BSLS,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
@@ -82,7 +84,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
        _______,  RGB_M_T,  RGB_HUD,  RGB_SAD,  RGB_VAD,  RGB_M_K,  XXXXXXX,   XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,CMD_START,  XXXXXXX,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
-       _______,  RGB_M_P,  XXXXXXX,  XXXXXXX,   KC_VER, RGB_M_SW,                       XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,
+           TST,  RGB_M_P,  XXXXXXX,  XXXXXXX,   KC_VER, RGB_M_SW,                       XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
        _______,            _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,            _______
   //`---------+---------/\--------+---------+---------+---------+---------/\---------+---------+---------+---------+---------/\--------+---------'
@@ -171,6 +173,8 @@ const Command commands[] = {
 
 inline layer_state_t layer_state_set_user(layer_state_t const state) { return update_tri_layer_state(state, LAYER_LOWER, LAYER_RAISE, LAYER_ADJUST); }
 
+bool toggle_shift_enabled = false;
+
 bool process_record_user(uint16_t const keycode, keyrecord_t* const record) {
     if (!process_auto_shift(keycode, record)) {
         return false;
@@ -179,11 +183,43 @@ bool process_record_user(uint16_t const keycode, keyrecord_t* const record) {
         return false;
     }
     switch (keycode) {
-        case KC_VER:
-            if (record->event.pressed) {
-                emit_version();
+        case TOGGLE_SHIFT_TOGGLE:
+            {
+                if (record->event.pressed) {
+                    toggle_shift_enabled ^= true;
+                }
+                return false;
             }
-            return false;
+            break;
+        case KC_VER:
+            {
+                if (record->event.pressed) {
+                    emit_version();
+                }
+                return false;
+            }
+            break;
+        case TOGGLE_SHIFT ... TOGGLE_SHIFT_MAX:
+            {
+                if (record->event.pressed) {
+                    uint16_t const actual_kc = keycode - TOGGLE_SHIFT;
+                    if (toggle_shift_enabled) {
+                        uint8_t const current_mods = get_mods();
+                        uint8_t const lshift_bit = MOD_BIT(KC_LSHIFT);
+                        uint8_t const rshift_bit = MOD_BIT(KC_RSHIFT);
+                        if (current_mods & (lshift_bit | rshift_bit)) {
+                            set_mods(current_mods & ~(lshift_bit | rshift_bit));
+                        } else {
+                            set_mods(current_mods ^ lshift_bit);
+                        }
+                        tap_code(actual_kc);
+                        set_mods(current_mods);
+                    } else {
+                        tap_code(actual_kc);
+                    }
+                }
+                return false;
+            }
             break;
     }
     return true;

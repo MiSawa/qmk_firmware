@@ -18,5 +18,10 @@ typedef enum {
 typedef enum {
     KC_VER = SAFE_RANGE,
     CMD_START,
+    TOGGLE_SHIFT_TOGGLE,
+    TOGGLE_SHIFT,
+    TOGGLE_SHIFT_MAX = TOGGLE_SHIFT + QK_BASIC_MAX,
 } custom_keycodes;
+
+#define TS(kc) (TOGGLE_SHIFT + ((kc)&0xFF))
 
