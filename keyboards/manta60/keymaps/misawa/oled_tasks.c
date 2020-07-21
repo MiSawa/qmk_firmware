@@ -49,9 +49,11 @@ oled_rotation_t oled_init_user(const oled_rotation_t rotation) {
 
 void oled_task_user(void) {
     if (is_keyboard_master()) {
+#ifdef OLED_COMMAND_MODE_ENABLE
         if (!oled_task_user_command()) {
             return;
         }
+#endif /// OLED_COMMAND_MODE_ENABLE
         render_status();  // Renders the current keyboard state (layer, lock, caps, scroll, etc)
     } else {
 #    ifdef ENABLE_SLAVE_OLED

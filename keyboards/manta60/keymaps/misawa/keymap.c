@@ -16,8 +16,12 @@
 #include QMK_KEYBOARD_H
 #include CONSTANTS_H
 #include <pinkey2u/pinkey2u.h>
-#include <command_mode/command_mode.h>
-#include <command_mode/keymap.h>
+
+#ifdef OLED_COMMAND_MODE_ENABLE
+#  include <command_mode/command_mode.h>
+#  include <command_mode/keymap.h>
+#endif // OLED_COMMAND_MODE_ENABLE
+
 #include <time_limited_auto_shift/process_time_limited_auto_shift.h>
 
 #define KC_LOWER MO(LAYER_LOWER)
@@ -94,21 +98,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 // clang-format on
 
-#define DECLARE_TAP_KEY_FUNC(keyname, ret) \
-    bool tap_ ## keyname (void) { \
-        SEND_STRING(SS_TAP(X_ ## keyname)); \
-        return ret; \
-    }
-
-DECLARE_TAP_KEY_FUNC(VOLU, true);
-DECLARE_TAP_KEY_FUNC(VOLD, true);
-DECLARE_TAP_KEY_FUNC(MUTE, true);
-
 bool emit_version(void) {
     SEND_STRING(ALL_VERSION);
     return false;
 }
-
 
 // Invert shift featture
 bool invert_shift_enabled = false;
@@ -211,12 +204,14 @@ void tap_custom_key(uint16_t const keycode) {
 
 uint16_t keymap_key_to_keycode(uint8_t const layer, keypos_t const key) {
     under_shift_invertion = false;
+#ifdef OLED_COMMAND_MODE_ENABLE
     // for tap_custom_key
     if (keycode_to_emit != UNDEF_KEY) {
         const uint16_t ret = keycode_to_emit;
         keycode_to_emit = UNDEF_KEY;
         return ret;
     }
+#endif // OLED_COMMAND_MODE_ENABLE
     uint16_t const ret = pgm_read_word(&keymaps[layer][key.row][key.col]);
     if (ret < INVERT_SHIFT(QK_BASIC) || INVERT_SHIFT(QK_BASIC_MAX) < ret) {
         return ret;
@@ -229,6 +224,8 @@ uint16_t keymap_key_to_keycode(uint8_t const layer, keypos_t const key) {
     return ret - INVERT_SHIFT(QK_BASIC);
 }
 
+#ifdef OLED_COMMAND_MODE_ENABLE
+
 #define DECLARE_TAP_CUSTOM_KEY_FUNC(keyname, ret) \
     bool tap_ ## keyname (void) { \
         tap_custom_key(KC_ ## keyname); \
@@ -240,6 +237,15 @@ DECLARE_TAP_CUSTOM_KEY_FUNC(ASDN, true);
 DECLARE_TAP_CUSTOM_KEY_FUNC(ASRP, false);
 DECLARE_TAP_CUSTOM_KEY_FUNC(ASTG, false);
 
+#define DECLARE_TAP_KEY_FUNC(keyname, ret) \
+    bool tap_ ## keyname (void) { \
+        SEND_STRING(SS_TAP(X_ ## keyname)); \
+        return ret; \
+    }
+
+DECLARE_TAP_KEY_FUNC(VOLU, true);
+DECLARE_TAP_KEY_FUNC(VOLD, true);
+DECLARE_TAP_KEY_FUNC(MUTE, true);
 
 // clang-format off
 const Command commands[] = {
@@ -254,6 +260,7 @@ const Command commands[] = {
     END_OF_COMMANDS,
 };
 // clang-format on
+#endif // OLED_COMMAND_MODE_ENABLE
 
 inline layer_state_t layer_state_set_user(layer_state_t const state) { return update_tri_layer_state(state, LAYER_LOWER, LAYER_RAISE, LAYER_ADJUST); }
 
@@ -264,9 +271,11 @@ bool process_record_user(uint16_t const keycode, keyrecord_t* const record) {
     if (!process_auto_shift(keycode, record)) {
         return false;
     }
+#ifdef OLED_COMMAND_MODE_ENABLE
     if (!process_record_user_command(keycode, record)) {
         return false;
     }
+#endif // OLED_COMMAND_MODE_ENABLE
 
     switch (keycode) {
         case KC_VER:
