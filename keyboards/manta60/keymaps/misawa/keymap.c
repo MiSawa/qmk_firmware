@@ -60,7 +60,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
        _______,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,                       XXXXXXX,  XXXXXXX,  XXXXXXX,  _______,  _______,  _______,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
-       _______,            _______,  _______,  _______,  _______,  _______,   _______,  _______, KC_RAISE,  _______,  _______,            _______
+       _______,            _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,            _______
   //`---------+---------/\--------+---------+---------+---------+---------/\---------+---------+---------+---------+---------/\--------+---------'
   ),
 
@@ -74,7 +74,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
        _______,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,                       XXXXXXX,  XXXXXXX,  XXXXXXX,  KC_LEFT,  KC_DOWN,  KC_RGHT,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
-       _______,            _______,  _______, KC_LOWER,  _______,  _______,   _______,  _______,  _______,  _______,  _______,            _______
+       _______,            _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,            _______
   //`---------+---------/\--------+---------+---------+---------+---------/\---------+---------+---------+---------+---------/\--------+---------'
   ),
 
@@ -114,10 +114,29 @@ bool emit_version(void) {
 bool invert_shift_enabled = false;
 bool under_shift_invertion = false;
 int shift_inverted_key_count = 0;
+#define LSHIFT_BIT MOD_BIT(KC_LSHIFT)
+#define RSHIFT_BIT MOD_BIT(KC_RSHIFT)
 
 uint8_t mod_before_invert_shift = 0;
+void set_shift_inverteed_mods(uint8_t const current_mods) {
+    if (current_mods & (LSHIFT_BIT | RSHIFT_BIT)) {
+        set_mods(current_mods & ~(LSHIFT_BIT | RSHIFT_BIT));
+    } else {
+        set_mods(current_mods ^ LSHIFT_BIT);
+    }
+}
+
 bool process_record_invert_shift(uint16_t const keycode, keyrecord_t* const record) {
     switch (keycode) {
+        case KC_LSHIFT:
+        case KC_RSHIFT:
+            {
+                if (!record->event.pressed) {
+                    mod_before_invert_shift &= ~MOD_BIT(keycode);
+                    set_shift_inverteed_mods(mod_before_invert_shift);
+                }
+            }
+            break;
         case INVERT_SHIFT_ON:
         case INVERT_SHIFT_OFF:
             {
@@ -142,20 +161,15 @@ bool process_record_invert_shift(uint16_t const keycode, keyrecord_t* const reco
         if (record->event.pressed) {
             if (!shift_inverted_key_count++) {
                 uint8_t const current_mods = get_mods();
-                uint8_t const lshift_bit = MOD_BIT(KC_LSHIFT);
-                uint8_t const rshift_bit = MOD_BIT(KC_RSHIFT);
                 mod_before_invert_shift = current_mods;
-                if (current_mods & (lshift_bit | rshift_bit)) {
-                    set_mods(current_mods & ~(lshift_bit | rshift_bit));
-                } else {
-                    set_mods(current_mods ^ lshift_bit);
-                }
+                set_shift_inverteed_mods(current_mods);
             }
             register_code(keycode);
             return false;
         } else {
             if (!--shift_inverted_key_count) {
                 set_mods(mod_before_invert_shift);
+                mod_before_invert_shift = 0;
             }
             unregister_code(keycode);
             return false;
@@ -233,10 +247,10 @@ const Command commands[] = {
     (Command) {.name = "as-",  .handler = tap_ASDN},
     (Command) {.name = "as?",  .handler = tap_ASRP},
     (Command) {.name = "as!",  .handler = tap_ASTG},
-    (Command){.name = "vol+", .handler = tap_VOLU},
-    (Command){.name = "vol-", .handler = tap_VOLD},
-    (Command){.name = "mute", .handler = tap_MUTE},
-    (Command){.name = "ver", .handler = emit_version},
+    (Command) {.name = "vol+", .handler = tap_VOLU},
+    (Command) {.name = "vol-", .handler = tap_VOLD},
+    (Command) {.name = "mute", .handler = tap_MUTE},
+    (Command) {.name = "ver",  .handler = emit_version},
     END_OF_COMMANDS,
 };
 // clang-format on

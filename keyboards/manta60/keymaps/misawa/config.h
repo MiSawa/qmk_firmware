@@ -24,7 +24,7 @@
 #ifdef DEBOUNCE
 # undef DEBOUNCE
 #endif
-#define DEBOUNCE 10
+#define DEBOUNCE 50
 
 #ifdef OLED_DRIVER_ENABLE
 

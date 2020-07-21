@@ -14,7 +14,6 @@ RGBLIGHT_ENABLE = no        # Disable keyboard RGB underglow
 OLED_DRIVER_ENABLE = yes    # OLED_ENABLE
 EXTRAKEY_ENABLE = yes       # Audio control and System control
 
-
 TIME_LIMITED_AUTO_SHIFT_ENABLE = yes     # Enable auto-shift
 
 THIS_KEYMAP_DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
@@ -23,4 +22,5 @@ include $(THIS_KEYMAP_DIR)/time_limited_auto_shift/rules.mk
 
 SRC += oled_tasks.c
 LAYOUTS = pinkey2u
+DEBOUNCE_TYPE = eager_pk
 
