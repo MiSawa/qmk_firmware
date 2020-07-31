@@ -29,5 +29,5 @@ ifeq ($(strip $(OLED_COMMAND_MODE_ENABLE)), yes)
 endif
 
 LAYOUTS = pinkey2u
-DEBOUNCE_TYPE = eager_pk
+# DEBOUNCE_TYPE = eager_pk
 

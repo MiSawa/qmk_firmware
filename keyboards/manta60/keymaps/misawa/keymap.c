@@ -31,6 +31,9 @@
 #define LALTMHEN ALT_T(KC_MHEN)
 #define RALTHENK RALT_T(KC_HENK)
 
+#define LCTLDEL LCTL_T(KC_DEL)
+#define RCTLBSPC RCTL_T(KC_BSPC)
+
 #define LOWERSPC LT(LAYER_LOWER, KC_SPC)
 #define RAISEENT LT(LAYER_RAISE, KC_ENT)
 
@@ -50,7 +53,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
        KC_LSFT,     KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,                          KC_N,     KC_M,  KC_COMM,   KC_DOT,  KC_SLSH,  KC_RSFT,
   //|---------+---------+---------+---------+---------+---------+---------|\---------+---------+---------+---------+---------+---------+---------|
-      KC_LOWER,           LALTMHEN, KC_LCTRL, LOWERSPC,  KC_LGUI,   KC_DEL,   KC_BSPC,   KC_DEL, RAISEENT, KC_RCTRL, RALTHENK,           KC_RAISE
+      KC_LOWER,           LALTMHEN,  LCTLDEL,   KC_SPC,  KC_LGUI, KC_LOWER,  KC_RAISE,   KC_DEL,   KC_ENT, RCTLBSPC, RALTHENK,           KC_RAISE
   //`---------+---------/\--------+---------+---------+---------+---------/\---------+---------+---------+---------+---------/\--------+---------'
   ),
 
